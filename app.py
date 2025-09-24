@@ -68,6 +68,16 @@ def predict_cycle_time(process, input_df):
     k = 1.28  # 90th quantile
     station_p90 = station_p50 + k * std_per_station
 
+    if mode_name == "Manual Form":
+        # Adjust P90 to ensure total consistency
+        total_p50_manual = np.sum(station_p50, axis=1)
+        ratio = total_p90 / total_p50_manual
+        station_p90 = station_p90 * ratio[:, np.newaxis]
+    # New adjust P90 to match total
+    # delta_total = total_p90 - total_p50
+    # station_ratio = stations_p50 / np.sum(stations_p50)
+    # stations_p90 = stations_p50 + delta_total * station_ratio
+
     # Cumulative
     cum_p50 = np.cumsum(station_p50, axis=1)
     cum_p90 = np.cumsum(station_p90, axis=1)
