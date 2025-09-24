@@ -5,6 +5,7 @@ import pandas as pd
 import joblib
 import tensorflow as tf
 import os
+import matplotlib.pyplot as plt
 
 # ---------------- Load Models & Preprocessors ----------------
 MODEL_PATHS = {
@@ -209,7 +210,6 @@ if input_df is not None and st.button("🔮 Predict"):
         cum_p90 = df_pred.loc[0, station_cols_p90].values
         stations = list(range(1, 11))
 
-        import matplotlib.pyplot as plt
         fig, ax = plt.subplots(figsize=(8, 5))
         ax.plot(stations, cum_p50, marker="o", label="Cumulative P50", color="blue")
         ax.plot(stations, cum_p90, marker="o", label="Cumulative P90", color="red", linestyle="--")
