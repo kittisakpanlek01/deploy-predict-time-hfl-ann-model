@@ -31,7 +31,7 @@ def predict_cycle_time(process, input_df):
     import joblib
     from tensorflow.keras.models import load_model
 
-    โหลด preprocessor + model ตาม process
+    # โหลด preprocessor + model ตาม process
     preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
     model = load_model(f"nn_time_model_{process.lower()}.keras")
 
