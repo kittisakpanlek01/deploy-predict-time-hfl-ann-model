@@ -157,6 +157,12 @@ else:
     st.success("✅ รับค่าจากฟอร์มเรียบร้อยแล้ว")
     st.dataframe(input_df)
 
+    print("Process:", process)
+    print("Input DF cols:", list(input_df.columns))
+    print("X_processed shape:", X_processed.shape)
+    print("Model input shape:", model.input_shape)
+
+
 # 3) Run prediction
 if input_df is not None and st.button("🔮 Predict"):
     df_pred = predict_cycle_time(process, input_df)
