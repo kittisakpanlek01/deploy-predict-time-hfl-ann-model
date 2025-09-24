@@ -27,6 +27,13 @@ def predict_cycle_time(process, input_df):
     model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
 
     X_processed = preprocessor.transform(input_df)
+
+    ## Check model input shape
+    print("Process:", process)
+    print("Input DF cols:", list(input_df.columns))
+    print("X_processed shape:", X_processed.shape)
+    print("Model input shape:", model.input_shape)
+
     preds = model.predict(X_processed, verbose=0)
 
     total_p50, total_p90, station_p50 = preds
@@ -156,12 +163,6 @@ else:
 
     st.success("✅ รับค่าจากฟอร์มเรียบร้อยแล้ว")
     st.dataframe(input_df)
-
-    print("Process:", process)
-    print("Input DF cols:", list(input_df.columns))
-    print("X_processed shape:", X_processed.shape)
-    print("Model input shape:", model.input_shape)
-
 
 # 3) Run prediction
 if input_df is not None and st.button("🔮 Predict"):
