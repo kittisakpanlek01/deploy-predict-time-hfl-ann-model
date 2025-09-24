@@ -26,14 +26,38 @@ def predict_cycle_time(process, input_df):
     model_file, pre_file = MODEL_PATHS[process]
     model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
 
+    # X_processed = preprocessor.transform(input_df)
+
+    # import joblib
+    # from tensorflow.keras.models import load_model
+
+    # โหลด preprocessor + model ตาม process
+    # preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
+    # model = load_model(f"nn_time_model_{process.lower()}.keras")
+
+    # Transform ข้อมูล
     X_processed = preprocessor.transform(input_df)
 
-    ## Check model input shape
+    # ---------------- Debug Logging ----------------
+    print("========== DEBUG INFO ==========")
     print("Process:", process)
-    print("Input DF cols:", list(input_df.columns))
+    print("Input DF columns:", list(input_df.columns))
     print("X_processed shape:", X_processed.shape)
-    print("Model input shape:", model.input_shape)
+    print("Model expects:", model.input_shape)
+    print("================================")
 
+    # ---------------- Shape Check ----------------
+    expected_features = model.input_shape[1]
+    actual_features = X_processed.shape[1]
+
+    if expected_features != actual_features:
+        raise ValueError(
+            f"❌ Feature mismatch! Model expects {expected_features}, "
+            f"but got {actual_features}. "
+            f"Check preprocessor & input columns for process '{process}'."
+        )
+
+    # Predictions
     preds = model.predict(X_processed, verbose=0)
 
     total_p50, total_p90, station_p50 = preds
