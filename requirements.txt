@@ -5,4 +5,5 @@ scikit-learn
 pandas 
 joblib
 numpy
+matplotlib
 openpyxl
