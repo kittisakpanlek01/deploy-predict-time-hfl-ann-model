@@ -116,6 +116,7 @@ if input_mode == "Upload File":
         st.warning("กรุณาอัปโหลดไฟล์ก่อนทำการพยากรณ์")
         input_df = None
 
+# --- Manual Input Mode ---
 else:
     st.subheader("📥 กรอกค่าพารามิเตอร์ (Manual Form)")
 
@@ -185,6 +186,8 @@ else:
     st.success("✅ รับค่าจากฟอร์มเรียบร้อยแล้ว")
     st.dataframe(input_df)
 
+    mode_name = "Manual Form"
+
 # 3) Run prediction
 if input_df is not None and st.button("🔮 Predict"):
     df_pred = predict_cycle_time(process, input_df)
@@ -193,5 +196,29 @@ if input_df is not None and st.button("🔮 Predict"):
     st.dataframe(df_pred)
 
     # กราฟ cumulative
-    st.subheader("📈 Cumulative Time (P50)")
-    st.line_chart(df_pred[[f"CUM_T{i}_P50" for i in range(1, 11)]])
+    if mode_name != "Manual Form":
+        st.subheader("📈 Cumulative Time (P50)")
+        st.line_chart(df_pred[[f"CUM_T{i}_P50" for i in range(1, 11)]])
+    else:
+        # (2) Plot Cumulative Graph P50 vs P90
+        st.subheader("📈 Cumulative Time (P50 vs P90)")        
+        station_cols_p50 = [f"CUM_T{i}_P50" for i in range(1, 11)]
+        station_cols_p90 = [f"CUM_T{i}_P90" for i in range(1, 11)]
+
+        cum_p50 = df_pred.loc[0, station_cols_p50].values
+        cum_p90 = df_pred.loc[0, station_cols_p90].values
+        stations = list(range(1, 11))
+
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.plot(stations, cum_p50, marker="o", label="Cumulative P50", color="blue")
+        ax.plot(stations, cum_p90, marker="o", label="Cumulative P90", color="red", linestyle="--")
+
+        ax.set_title("Cumulative Remaining Time per Station")
+        ax.set_xlabel("Station")
+        ax.set_ylabel("Time (minutes)")
+        ax.set_xticks(stations)
+        ax.grid(True, linestyle="--", alpha=0.6)
+        ax.legend()
+
+        st.pyplot(fig)
