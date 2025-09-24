@@ -23,17 +23,17 @@ def load_model_and_preprocessor(model_file, pre_file):
 
 # ---------------- Prediction Function ----------------
 def predict_cycle_time(process, input_df):
-    model_file, pre_file = MODEL_PATHS[process]
-    model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
+    # model_file, pre_file = MODEL_PATHS[process]
+    # model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
 
     # X_processed = preprocessor.transform(input_df)
 
-    # import joblib
-    # from tensorflow.keras.models import load_model
+    import joblib
+    from tensorflow.keras.models import load_model
 
-    # โหลด preprocessor + model ตาม process
-    # preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
-    # model = load_model(f"nn_time_model_{process.lower()}.keras")
+    โหลด preprocessor + model ตาม process
+    preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
+    model = load_model(f"nn_time_model_{process.lower()}.keras")
 
     # Transform ข้อมูล
     X_processed = preprocessor.transform(input_df)
