@@ -23,20 +23,17 @@ def load_model_and_preprocessor(model_file, pre_file):
 
 # ---------------- Prediction Function ----------------
 def predict_cycle_time(process, input_df):
-    # model_file, pre_file = MODEL_PATHS[process]
-    # model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
+    model_file, pre_file = MODEL_PATHS[process]
+    model, preprocessor = load_model_and_preprocessor(model_file, pre_file)
 
-    # X_processed = preprocessor.transform(input_df)
-
-    import joblib
-    from tensorflow.keras.models import load_model
-
-    # โหลด preprocessor + model ตาม process
-    preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
-    model = load_model(f"nn_time_model_{process.lower()}.keras", compile=False)
-
-    # Transform ข้อมูล
     X_processed = preprocessor.transform(input_df)
+
+    # import joblib
+    # from tensorflow.keras.models import load_model
+    ## โหลด preprocessor + model ตาม process
+    # preprocessor = joblib.load(f"preprocessor_{process.lower()}.pkl")
+    # model = load_model(f"nn_time_model_{process.lower()}.keras", compile=False)
+    # X_processed = preprocessor.transform(input_df)
 
     # ---------------- Debug Logging ----------------
     print("========== DEBUG INFO ==========")
@@ -175,7 +172,7 @@ else:
         "ENT_TENS_T6": ENT_TENS_T6, "ENT_TENS_T8": ENT_TENS_T8,
         "CycleCode_In": CycleCode_In, "SteelGrade": SteelGrade
     }
-    if process in ["SK2", "SK3"]:
+    if process in ["SK1", "SK2", "SK3"]:
         input_dict.update({
             "EXT_TENS_T6": EXT_TENS_T6,
             "EXT_TENS_T8": EXT_TENS_T8,
